@@ -40,3 +40,8 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+*.ts linguist-detectable=true
+*.js linguist-detectable=true
+*.html linguist-detectable=false
+*.xml linguist-detectable=false
