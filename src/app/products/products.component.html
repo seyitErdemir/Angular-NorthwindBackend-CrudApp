@@ -1,0 +1,416 @@
+<!--add Product  Modal -->
+<div class="modal fade" id="exampleModalAddProduct" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 mx-auto p-5  register">
+                        <form #addProductForm="ngForm" (ngSubmit)="onAddProductSubmit(addProductForm)">
+
+                            <div class="mb-3">
+                                <label class="form-label">{{locale.name}}</label>
+                                <input ngModel value="" type="text" name="name" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">{{locale.price}}</label>
+                                <input ngModel type="number" name="price" class="form-control" value="">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">{{locale.stock}}</label>
+                                <input ngModel type="number" name="stock" class="form-control">
+                            </div>
+                            <div class="text-center   ">
+                                <button type="submit" class="btn btn-warning w-50">{{locale.add}}</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container border border-dark border-2 mt-2 p-2 ">
+    <div class="row border-dashed m-2 ">
+        <div class="row border-2 p-4  ">
+            <div class="  border-dashed">
+                <div class="row p-2">
+                    <div class="col-6 col-ms-12 p-2  ">
+                        <button class="btn btn-primary " (click)="changeView(3);"><i
+                                class="fa-solid fa-grip  h5 "></i></button>
+                        <button class="btn btn-primary mx-2" (click)="changeView(2);"><i
+                                class="fa-solid fa-grip-vertical  h5"></i></button>
+                        <button class="btn btn-primary " (click)="changeView(1);"><i
+                                class="fa-solid fa-grip-lines  h5"></i></button>
+
+                        <button class="btn btn-warning mx-2    " data-bs-toggle="modal"
+                            data-bs-target="#exampleModalAddProduct">
+                            <i class="fa-regular fa-square-plus  h5"></i>
+                        </button>
+                    </div>
+
+                    <div class="col-6 p-2  col-ms-12  text-center">
+                        <input class="form-control p-2 border-dashed" type="text" placeholder="{{locale.search}}"
+                            [(ngModel)]="filterText" (ngModelChange)="onInputChange()">
+                        <span class="text-muted" *ngIf="filterText"> {{locale.search}} : {{filterText}}</span>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+
+
+        <ng-template #templateError>
+            <div class="mx-auto text-center col-4 alert alert-danger">{{locale.notProduct}}</div>
+        </ng-template>
+
+        <div class="row text-center" *ngIf=" filterProducts.length> 0;else templateError">
+
+            <ng-container *ngIf="data == 3;else second">
+                <div class="col-12    col-lg-6   col-xl-4  mt-4 p-2" *ngFor="let product of filterProducts">
+                    <div class="card ">
+                        <img width="200px" height="200px"
+                            src="http://localhost:3030/api/products/images/{{product.imageName}}"
+                            class="card-img-top  p-2 ">
+                        <div class="card-body">
+                            <p class="card-text">{{product.name}} </p>
+                            <p class="card-text">{{product.price}} $ <span
+                                    class="ms-4">{{locale.stock}}:{{product.stock}} </span>
+                            </p>
+                            <button class="btn btn-warning " data-bs-toggle="modal"
+                                [attr.data-bs-target]="'#exampleModal'+ product.id">{{locale.update}}</button>
+                            <button class="btn btn-danger mx-1 "
+                                (click)='productDelete(product.id)'>{{locale.delete}}</button>
+                            <button class="btn btn-info  " data-bs-toggle="modal"
+                                [attr.data-bs-target]="'#productInfoModal'+ product.id">{{locale.info}}</button>
+                        </div>
+
+                    </div>
+
+                    <!--update  Modal -->
+                    <div class="modal fade" id="exampleModal{{product.id}}" tabindex="-1"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true" style="opacity: 0.9">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-12 mx-auto p-5  register">
+                                            <form #myForm="ngForm" #updateProductForm="ngForm"
+                                                (ngSubmit)="onUpdateProductSubmit(updateProductForm  )">
+                                                <div class="text-center" style="height:150px;">
+                                                    <img width="100px" height="100px"
+                                                        src="http://localhost:3030/api/products/images/{{product.imageName}}">
+                                                </div>
+                                                <input [ngModel]="product.id" type="hidden" name="id">
+                                                <div class="mb-3">
+                                                    <label class="form-label">{{locale.name}}</label>
+                                                    <input [ngModel]="product.name" type="text" name="name"
+                                                        class="form-control">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">{{locale.price}}</label>
+                                                    <input [ngModel]="product.price" type="number" name="price"
+                                                        class="form-control">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">{{locale.stock}}</label>
+                                                    <input [ngModel]="product.stock" type="number" name="stock"
+                                                        class="form-control">
+                                                </div>
+                                                <div class="text-center   ">
+                                                    <button type="submit"
+                                                        class="btn btn-warning w-25">{{locale.update}}</button>
+                                                </div>
+
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- info Modal -->
+                    <div class="modal fade" id="productInfoModal{{product.id}}" data-bs-backdrop="static"
+                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="staticBackdropLabel">{{product.name}}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <img width="300px"
+                                        src="http://localhost:3030/api/products/images/{{product.imageName}}"
+                                        class="card-img-top  p-2 ">
+
+                                    <p class="card-text">{{product.name}} </p>
+                                    <p class="card-text">{{product.price}} $ <span
+                                            class="ms-4">{{locale.stock}}:{{product.stock}}
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">{{locale.close}}</button>
+                                    <button class="btn btn-danger mx-3 "
+                                        (click)='productDelete(product.id)'>{{locale.delete}}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </ng-container>
+
+
+
+            <ng-template #second>
+                <ng-container *ngIf="data == 2;else third">
+
+                    <div class="col-12 col-lg-6  mt-4 p-1" *ngFor="let product of filterProducts">
+
+                        <div class="card  " style="max-width: 540px;">
+                            <div class="row g-0">
+                                <div class="col-md-4 p-2">
+                                    <img style="max-width:200px ; min-width: 200px; max-height:200px ; min-height: 200px; "
+                                        src="http://localhost:3030/api/products/images/{{product.imageName}}"
+                                        class="img-fluid rounded-start" alt="...">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{product.name}} </h5>
+                                        <p class="card-text">{{product.price}} $ <span class="ms-4">{{locale.stock}} :
+                                                {{product.stock}} </span>
+
+                                        <div class="mt-5">
+                                            <button class="btn btn-warning " data-bs-toggle="modal"
+                                                [attr.data-bs-target]="'#exampleModal'+ product.id">{{locale.update}}</button>
+                                            <button class="btn btn-danger mx-1 "
+                                                (click)='productDelete(product.id)'>{{locale.delete}}</button>
+                                            <button class="btn btn-info  " data-bs-toggle="modal"
+                                                [attr.data-bs-target]="'#productInfoModal'+ product.id">{{locale.info}}</button>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                        <!--update  Modal -->
+                        <div class="modal fade" id="exampleModal{{product.id}}" tabindex="-1"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true" style="opacity: 0.9">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-12 mx-auto p-5  register">
+                                                <form #myForm="ngForm" #updateProductForm="ngForm"
+                                                    (ngSubmit)="onUpdateProductSubmit(updateProductForm  )">
+                                                    <div class="text-center" style="height:150px;">
+                                                        <img width="100px" height="100px"
+                                                            src="http://localhost:3030/api/products/images/{{product.imageName}}">
+                                                    </div>
+                                                    <input [ngModel]="product.id" type="hidden" name="id">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">{{locale.name}}</label>
+                                                        <input [ngModel]="product.name" type="text" name="name"
+                                                            class="form-control">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">{{locale.price}}</label>
+                                                        <input [ngModel]="product.price" type="number" name="price"
+                                                            class="form-control">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">{{locale.stock}}</label>
+                                                        <input [ngModel]="product.stock" type="number" name="stock"
+                                                            class="form-control">
+                                                    </div>
+                                                    <div class="text-center   ">
+                                                        <button type="submit"
+                                                            class="btn btn-warning w-25">{{locale.update}}</button>
+                                                    </div>
+
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- info Modal -->
+                        <div class="modal fade" id="productInfoModal{{product.id}}" data-bs-backdrop="static"
+                            data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="staticBackdropLabel">{{product.name}}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <img width="300px"
+                                            src="http://localhost:3030/api/products/images/{{product.imageName}}"
+                                            class="card-img-top  p-2 ">
+
+                                        <p class="card-text">{{product.name}} </p>
+                                        <p class="card-text">{{product.price}} $ <span
+                                                class="ms-4">{{locale.stock}}:{{product.stock}}
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">{{locale.close}}</button>
+                                        <button class="btn btn-danger mx-3 "
+                                            (click)='productDelete(product.id)'>{{locale.delete}}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </ng-container>
+            </ng-template>
+
+            <ng-template #third>
+
+                <div class="col-12  mt-4 p-2" *ngFor="let product of filterProducts">
+
+
+                    <div class="card  ">
+                        <div class="row g-0">
+                            <div class="col-md-12 col-md-6 col-xl-4  p-2">
+                                <img style="max-width:100px ; min-width: 100px; max-height:100px ; min-height: 100px; "
+                                    src="http://localhost:3030/api/products/images/{{product.imageName}}"
+                                    class="img-fluid rounded-start" alt="...">
+                            </div>
+                            <div class="col-md-12 col-md-6 col-xl-4 ">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{locale.name}} : {{product.name}} </h5>
+                                    <h5 class="card-title">{{locale.price}} : {{product.price}} </h5>
+                                    <h5 class="card-title">{{locale.stock}} : {{product.stock}} </h5>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-md-6 col-xl-4 ">
+                                <div class="card-body ">
+
+
+                                    <div class=" mt-4  ">
+                                        <button class="btn btn-warning " data-bs-toggle="modal"
+                                            [attr.data-bs-target]="'#exampleModal'+ product.id">{{locale.update}}</button>
+                                        <button class="btn btn-danger mx-1 "
+                                            (click)='productDelete(product.id)'>{{locale.delete}}</button>
+                                        <button class="btn btn-info  " data-bs-toggle="modal"
+                                            [attr.data-bs-target]="'#productInfoModal'+ product.id">{{locale.info}}</button>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <!--update  Modal -->
+                    <div class="modal fade" id="exampleModal{{product.id}}" tabindex="-1"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true" style="opacity: 0.9">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-12 mx-auto p-5  register">
+                                            <form #myForm="ngForm" #updateProductForm="ngForm"
+                                                (ngSubmit)="onUpdateProductSubmit(updateProductForm  )">
+                                                <div class="text-center" style="height:150px;">
+                                                    <img width="100px" height="100px"
+                                                        src="http://localhost:3030/api/products/images/{{product.imageName}}">
+                                                </div>
+                                                <input [ngModel]="product.id" type="hidden" name="id">
+                                                <div class="mb-3">
+                                                    <label class="form-label">{{locale.name}}</label>
+                                                    <input [ngModel]="product.name" type="text" name="name"
+                                                        class="form-control">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">{{locale.price}}</label>
+                                                    <input [ngModel]="product.price" type="number" name="price"
+                                                        class="form-control">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">{{locale.stock}}</label>
+                                                    <input [ngModel]="product.stock" type="number" name="stock"
+                                                        class="form-control">
+                                                </div>
+                                                <div class="text-center   ">
+                                                    <button type="submit"
+                                                        class="btn btn-warning w-25">{{locale.update}}</button>
+                                                </div>
+
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- info Modal -->
+                    <div class="modal fade" id="productInfoModal{{product.id}}" data-bs-backdrop="static"
+                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="staticBackdropLabel">{{product.name}}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <img width="300px"
+                                        src="http://localhost:3030/api/products/images/{{product.imageName}}"
+                                        class="card-img-top  p-2 ">
+
+                                    <p class="card-text">{{product.name}} </p>
+                                    <p class="card-text">{{product.price}} $ <span
+                                            class="ms-4">{{locale.stock}}:{{product.stock}}
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">{{locale.close}}</button>
+                                    <button class="btn btn-danger mx-3 "
+                                        (click)='productDelete(product.id)'>{{locale.delete}}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </ng-template>
+        </div>
+
+
+    </div>
+</div>

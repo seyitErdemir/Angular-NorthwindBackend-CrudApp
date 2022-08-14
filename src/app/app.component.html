@@ -1,0 +1,36 @@
+<div class="container">
+
+  <app-navbar></app-navbar>
+  <router-outlet></router-outlet>
+  <app-footer></app-footer>
+
+
+  <script>
+    $('.owl-carousel').owlCarousel({
+      loop: true,
+      margin: 10,
+      autoWidth: true,
+      responsive: {
+        0: {
+          items: 1
+        },
+        500: {
+          items: 1
+        },
+        800: {
+          items: 2
+        },
+        1000: {
+          items: 4
+        }
+        ,
+        1500: {
+          items: 5
+        },
+        2000: {
+          items: 6
+        }
+      }
+    })
+  </script>
+</div>

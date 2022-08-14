@@ -1,0 +1,145 @@
+<nav class="navbar navbar-dark bg-dark navbar-expand-xl  ">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="https://via.placeholder.com/250x80" alt="" height="80" class="d-inline-block align-text-top">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end  border m-2 p-2 fs-5" id="navbarNavDropdown">
+            <ul class="navbar-nav me-2 text-center">
+                <li class="nav-item">
+                    <a routerLink="/" routerLinkActive="active-link active "
+                        class="nav-link  border border-opacity-50 me-2" aria-current="page">{{locale.home}}</a>
+                </li>
+                <li class="nav-item" *ngIf="loginCheck">
+                    <a routerLink="/products" routerLinkActive="active-link active"
+                        class="nav-link border border-opacity-50  me-2">{{locale.products}}</a>
+                </li>
+                <li class="nav-item " *ngIf="loginCheck">
+                    <a routerLink="/categories" routerLinkActive="active-link active"
+                        class="nav-link border border-opacity-50  me-2">{{locale.categories}}</a>
+                </li>
+
+                <li class="nav-item " *ngIf="loginCheck">
+                    <a routerLink="/employees" routerLinkActive="active-link active"
+                        class="nav-link border border-opacity-50  me-2">{{locale.employees}}</a>
+                </li>
+
+                <li class="nav-item " *ngIf="loginCheck">
+                    <a routerLink="/contact" routerLinkActive="active-link active"
+                        class="nav-link border border-opacity-50  me-2">{{locale.contact}}</a>
+                </li>
+                
+                <li class="nav-item" *ngIf="!loginCheck">
+                    <a type="button" data-bs-toggle="modal" data-bs-target="#exampleModalLogin"
+                        class="nav-link border border-opacity-50  me-2" href="#">{{locale.login}}</a>
+                </li>
+
+                <li class="nav-item pointer" *ngIf="loginCheck">
+                    <a (click)="logout()" class="nav-link border border-opacity-50  me-2">{{locale.logout}}</a>
+                </li>
+
+                <li class="nav-item" *ngIf="!loginCheck">
+                    <a type="button" data-bs-toggle="modal" data-bs-target="#exampleModalRegister"
+                        class="nav-link border border-opacity-50  me-2" href="#">{{locale.register}}</a>
+                </li>
+
+                <li class="nav-item pointer" *ngIf="lang=='en'">
+                    <a  (click)="setLanguage('tr')"   class="nav-link border border-opacity-50  me-2"><img height="40" src="https://ieeefirat.com/images/settings/6298b5748d9a0.png" alt=""></a>
+                </li>
+                <li class="nav-item pointer" *ngIf="lang=='tr'"> 
+                    <a   (click)="setLanguage('en')"   class="nav-link border border-opacity-50  me-2"><img height="40"  src="https://ieeefirat.com/images/settings/6298ba40c18a1.png" alt=""></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+
+
+<!--Login  Modal -->
+<div class="modal fade" id="exampleModalLogin" tabindex="-1"  aria-labelledby="exampleModalLabel"  aria-hidden="true"
+    style="opacity: 0.8">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 mx-auto p-5  register">
+                        <form #myForm="ngForm" (ngSubmit)="onSubmit(myForm)">
+                            <div class="text-center" style="height:150px;">
+                                <img src="https://thumbs.dreamstime.com/b/login-button-square-d-push-sign-177297913.jpg"
+                                    alt="" height="140px">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="exampleInputEmail1" class="form-label">{{locale.username}}</label>
+                                <input ngModel type="text" name="username" class="form-control" id="exampleInputEmail1"
+                                    aria-describedby="emailHelp" placeholder="{{locale.username}}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleInputEmail1" class="form-label">{{locale.password}}</label>
+                                <input ngModel type="password" name="password" class="form-control"
+                                    id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="*********">
+                            </div>
+                            <div class="text-center   ">
+                                <button type="submit" class="btn btn-secondary w-25">{{locale.login}}</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Register Modal -->
+<div class="modal fade" id="exampleModalRegister" tabindex="-1"  aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="opacity: 0.9">
+            <div class="container  ">
+                <div class="row">
+                    <div class="col-12 mx-auto p-5 register">
+                        <form #myRegisterForm="ngForm" (ngSubmit)="onRegisterSubmit(myRegisterForm)">
+                            <div class="text-center" style="height:150px;">
+                                <img height="140px"
+                                    src="https://img.freepik.com/premium-vector/red-register-now-label-modern-style-white_123447-702.jpg?w=2000"
+                                    alt="">
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleInputEmail1" class="form-label">{{locale.firstName}}</label>
+                                <input ngModel  type="text" name="firstName" class="form-control" id="exampleInputEmail1"
+                                    aria-describedby="emailHelp" placeholder="{{locale.firstName}}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleInputEmail1" class="form-label">{{locale.lastName}}</label>
+                                <input  ngModel  type="text" name="lastName" class="form-control" id="exampleInputEmail1"
+                                    aria-describedby="emailHelp" placeholder="{{locale.lastName}}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleInputEmail1" class="form-label">{{locale.username}}</label>
+                                <input ngModel  type="text" name="username" class="form-control" id="exampleInputEmail1"
+                                    aria-describedby="emailHelp" placeholder="{{locale.username}}">
+
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleInputEmail1" class="form-label">{{locale.password}}</label>
+                                <input ngModel  type="password" name="password" class="form-control" id="exampleInputEmail1"
+                                    aria-describedby="emailHelp" placeholder="*********">
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-secondary w-25">{{locale.register}}</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

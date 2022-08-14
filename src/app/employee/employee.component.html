@@ -1,0 +1,658 @@
+<!--add Product  Modal -->
+<div class="modal fade" id="exampleModalAddEmployee" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 mx-auto p-5  register">
+                        <form #addEmployeeForm="ngForm" (ngSubmit)="onAddEmployeeSubmit(addEmployeeForm)">
+
+                            <div class="mb-3">
+                                <label class="form-label">{{locale.firstName}}</label>
+                                <input ngModel value="" type="text" name="firstName" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">{{locale.lastName}}</label>
+                                <input ngModel type="text" name="lastName" class="form-control" value="">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">{{locale.title}}</label>
+                                <input ngModel type="text" name="title" class="form-control" value="">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">{{locale.country}}</label>
+                                <input ngModel type="text" name="country" class="form-control" value="">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">{{locale.city}}</label>
+                                <input ngModel type="text" name="city" class="form-control" value="">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">{{locale.birthDate}}</label>
+                                <input ngModel type="date" name="birthDate" class="form-control" value="">
+                            </div>
+
+                            <div class="text-center   ">
+                                <button type="submit" class="btn btn-warning w-50">{{locale.add}}</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container border border-dark border-2 mt-2 p-2 ">
+    <div class="row border-dashed m-2 ">
+        <div class="row border-2 p-4  ">
+            <div class="  border-dashed">
+                <div class="row p-2">
+                    <div class="col-6 col-ms-12 p-2  ">
+                        <button class="btn btn-primary " (click)="changeView(3);"><i
+                                class="fa-solid fa-grip  h5 "></i></button>
+                        <button class="btn btn-primary mx-2" (click)="changeView(2);"><i
+                                class="fa-solid fa-grip-vertical  h5"></i></button>
+                        <button class="btn btn-primary " (click)="changeView(1);"><i
+                                class="fa-solid fa-grip-lines  h5"></i></button>
+
+                        <button class="btn btn-warning mx-2    " data-bs-toggle="modal"
+                            data-bs-target="#exampleModalAddEmployee">
+                            <i class="fa-regular fa-square-plus  h5"></i>
+                        </button>
+                    </div>
+
+                    <div class="col-6 p-2  col-ms-12  text-center">
+                        <input class="form-control p-2 border-dashed" type="text" placeholder="{{locale.search}}"
+                            [(ngModel)]="filterText" (ngModelChange)="onInputChange()">
+                        <span class="text-muted" *ngIf="filterText"> {{locale.search}} : {{filterText}}</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <ng-template #templateError>
+            <div class="mx-auto text-center  col-10 col-lg-6 col-xl-4 alert alert-danger">{{locale.notEmployee}}</div>
+        </ng-template>
+
+        <div class="row text-center" *ngIf=" filterEmployees.length> 0;else templateError">
+
+            <ng-container *ngIf="data == 3;else second">
+                <div class=" col-12    col-lg-6   col-xl-4  mt-4 p-2" *ngFor="let employee of filterEmployees">
+                    <div class="card ">
+                        <div class="row">
+                            <div class="col-8">
+                                <img width="200px" height="200px"
+                                    src="http://localhost:3030/api/employees/images/{{employee.imageName}}"
+                                    class="card-img-top  p-2 ">
+                            </div>
+                            <div class="col-4">
+                                <div *ngIf="employee.title === 'Sales Representative'"
+                                    style="width:100px; height:100px ; border-radius:50%; "
+                                    class="border border-radius mt-2 position-relative bg-warning"><span
+                                        class="  position-absolute" style=" top:35px; left:40px; ">SR</span></div>
+
+                                <div *ngIf="employee.title === 'Vice President, Sales'"
+                                    style="width:100px; height:100px; border-radius:50%; "
+                                    class="border border-radius mt-2 position-relative bg-danger"><span
+                                        class="  position-absolute" style=" top:35px; left:40px;">VPS</span></div>
+
+                                <div *ngIf="employee.title === 'Sales Manager'"
+                                    style="width:100px; height:100px; border-radius:50%; "
+                                    class="border border-radius mt-2 position-relative  bg-info"><span
+                                        class="  position-absolute" style="top:35px; left:40px; ">SM</span></div>
+
+                                <div *ngIf="employee.title === 'Inside Sales Coordinator'"
+                                    style="width:100px; height:100px; border-radius:50%; "
+                                    class="border border-radius mt-2 position-relative bg-primary"><span
+                                        class="  position-absolute" style="  top:35px; left:40px; ">ISC</span></div>
+
+                                <div *ngIf="employee.title === 'Software Developer'   "
+                                    style="width:100px; height:100px ; border-radius:50%; "
+                                    class="border border-radius mt-2 position-relative  bg-success"><span
+                                        class="  position-absolute" style=" top:35px; left:40px;">SD</span></div>
+
+
+                                <p class="card-text"> {{employee.firstName}} {{employee.lastName}} </p>
+                                <p class="card-text"> {{employee.title}}</p>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <p class="card-text">{{locale.country}}/{{locale.city}} :
+                                {{employee.country}}/{{employee.city}} </p>
+                            <p class="card-text">{{locale.birthDate}} : {{employee.birthDate}}</p>
+                            <button class="btn btn-warning " data-bs-toggle="modal"
+                                [attr.data-bs-target]="'#exampleModal'+ employee.id">{{locale.update}}</button>
+                            <button class="btn btn-danger mx-1 "
+                                (click)='employeeDelete(employee.id)'>{{locale.delete}}</button>
+                            <button class="btn btn-info  " data-bs-toggle="modal"
+                                [attr.data-bs-target]="'#employeeInfoModal'+ employee.id">{{locale.info}}</button>
+                        </div>
+
+                    </div>
+
+                    <!--update  Modal -->
+                    <div class="modal fade" id="exampleModal{{employee.id}}" tabindex="-1"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true" style="opacity: 0.9">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-12 mx-auto p-5  register">
+                                            <form #myForm="ngForm" #updateEmployeeForm="ngForm"
+                                                (ngSubmit)="onUpdateEmployeeSubmit(updateEmployeeForm)">
+                                                <div class="text-center" style="height:150px;">
+                                                    <img width="100px" height="100px"
+                                                        src="http://localhost:3030/api/employees/images/{{employee.imageName}}">
+                                                </div>
+
+                                                <input [ngModel]="employee.id" type="hidden" name="id">
+                                                <div class="mb-3">
+                                                    <label class="form-label">{{locale.firstName}}</label>
+                                                    <input [ngModel]="employee.firstName" type="text" name="firstName"
+                                                        class="form-control">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">{{locale.lastName}}</label>
+                                                    <input [ngModel]="employee.lastName" type="text" name="lastName"
+                                                        class="form-control">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">{{locale.title}}</label>
+                                                    <input [ngModel]="employee.title" type="text" name="title"
+                                                        class="form-control">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">{{locale.country}}</label>
+                                                    <input [ngModel]="employee.country" type="text" name="country"
+                                                        class="form-control">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">{{locale.city}}</label>
+                                                    <input [ngModel]="employee.city" type="text" name="city"
+                                                        class="form-control">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">{{locale.birthDate}}</label>
+                                                    <input [ngModel]="employee.birthDate" type="date" name="birthDate"
+                                                        class="form-control">
+                                                </div>
+
+
+                                                <div class="text-center   ">
+                                                    <button type="submit"
+                                                        class="btn btn-warning w-25">{{locale.update}}</button>
+                                                </div>
+
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- info Modal -->
+                    <div class="modal fade" id="employeeInfoModal{{employee.id}}" data-bs-backdrop="static"
+                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="staticBackdropLabel">{{employee.firstName}}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-8">
+                                            <img width="200px" height="200px"
+                                                src="http://localhost:3030/api/employees/images/{{employee.imageName}}"
+                                                class="card-img-top  p-2 ">
+                                        </div>
+                                        <div class="col-4">
+                                            <div style="width:100px; height:100px ; border-radius:50%; background:red;"
+                                                class="border border-radius mt-2"><span class="mt-5">SR</span></div>
+                                            <p class="card-text"> {{employee.firstName}} {{employee.lastName}} </p>
+                                            <p class="card-text"> {{employee.title}}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <p class="card-text">{{locale.country}}/{{locale.city}} :
+                                            {{employee.country}}/{{employee.city}} </p>
+                                        <p class="card-text">{{locale.birthDate}} : {{employee.birthDate}}</p>
+
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">{{locale.close}}</button>
+                                    <button class="btn btn-danger mx-3 "
+                                        (click)='employeeDelete(employee.id)'>{{locale.delete}}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </ng-container>
+
+
+
+
+
+            <ng-template #second>
+                <ng-container *ngIf="data == 2;else third">
+                    <div class="col-12 col-lg-6  mt-4 p-1" *ngFor="let employee of filterEmployees">
+                        <div class="card  " style="max-width: 540px;">
+                            <div class="row g-0">
+                                <div class="col-md-4 p-2">
+
+                                    <div *ngIf="employee.title === 'Sales Representative'"
+                                        style="width:60px; height:60px ; border-radius:50%; "
+                                        class="border border-radius mt-2 position-relative bg-warning"><span
+                                            class="  position-absolute" style=" top:15px; left:20px;">SR</span></div>
+
+                                    <div *ngIf="employee.title === 'Vice President, Sales'"
+                                        style="width:60px; height:60px ; border-radius:50%; "
+                                        class="border border-radius mt-2 position-relative bg-danger"><span
+                                            class="  position-absolute" style=" top:15px; left:10px;">VPS</span></div>
+
+                                    <div *ngIf="employee.title === 'Sales Manager'"
+                                        style="width:60px; height:60px ; border-radius:50%; "
+                                        class="border border-radius mt-2 position-relative  bg-info"><span
+                                            class="  position-absolute" style=" top:15px; left:20px;">SM</span></div>
+
+                                    <div *ngIf="employee.title === 'Inside Sales Coordinator'"
+                                        style="width:60px; height:60px ; border-radius:50%; "
+                                        class="border border-radius mt-2 position-relative bg-primary"><span
+                                            class="  position-absolute" style=" top:15px; left:10px;">ISC</span></div>
+
+                                    <div *ngIf="employee.title === 'Software Developer'"
+                                        style="width:60px; height:60px ; border-radius:50%; "
+                                        class="border border-radius mt-2 position-relative  bg-success"><span
+                                            class="  position-absolute" style=" top:15px; left:20px;">SD</span></div>
+
+
+                                    <img style="max-width:200px ; min-width: 200px; max-height:200px ; min-height: 200px; "
+                                        src="http://localhost:3030/api/employees/images/{{employee.imageName}}"
+                                        class="img-fluid rounded-start" alt="...">
+
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+
+                                        <p class="card-text"> {{employee.firstName}} {{employee.lastName}} </p>
+                                        <p class="card-text"> {{employee.title}}</p>
+                                        <p class="card-text">{{locale.country}}/{{locale.city}} :
+                                            {{employee.country}}/{{employee.city}} </p>
+                                        <p class="card-text">{{locale.birthDate}} : {{employee.birthDate}}</p>
+
+                                        <div class="mt-5">
+                                            <button class="btn btn-warning " data-bs-toggle="modal"
+                                                [attr.data-bs-target]="'#exampleModal'+ employee.id">{{locale.update}}</button>
+                                            <button class="btn btn-danger mx-1 "
+                                                (click)='employeeDelete(employee.id)'>{{locale.delete}}</button>
+                                            <button class="btn btn-info  " data-bs-toggle="modal"
+                                                [attr.data-bs-target]="'#employeeInfoModal'+ employee.id">{{locale.info}}</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!--update  Modal -->
+                        <div class="modal fade" id="exampleModal{{employee.id}}" tabindex="-1"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true" style="opacity: 0.9">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-12 mx-auto p-5  register">
+                                                <form #myForm="ngForm" #updateEmployeeForm="ngForm"
+                                                    (ngSubmit)="onUpdateEmployeeSubmit(updateEmployeeForm)">
+                                                    <div class="text-center" style="height:150px;">
+                                                        <img width="100px" height="100px"
+                                                            src="http://localhost:3030/api/employees/images/{{employee.imageName}}">
+                                                    </div>
+
+                                                    <input [ngModel]="employee.id" type="hidden" name="id">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">{{locale.firstName}}</label>
+                                                        <input [ngModel]="employee.firstName" type="text"
+                                                            name="firstName" class="form-control">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">{{locale.lastName}}</label>
+                                                        <input [ngModel]="employee.lastName" type="text" name="lastName"
+                                                            class="form-control">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">{{locale.title}}</label>
+                                                        <input [ngModel]="employee.title" type="text" name="title"
+                                                            class="form-control">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">{{locale.country}}</label>
+                                                        <input [ngModel]="employee.country" type="text" name="country"
+                                                            class="form-control">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">{{locale.city}}</label>
+                                                        <input [ngModel]="employee.city" type="text" name="city"
+                                                            class="form-control">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">{{locale.birthDate}}</label>
+                                                        <input [ngModel]="employee.birthDate" type="date"
+                                                            name="birthDate" class="form-control">
+                                                    </div>
+
+
+                                                    <div class="text-center   ">
+                                                        <button type="submit"
+                                                            class="btn btn-warning w-25">{{locale.update}}</button>
+                                                    </div>
+
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- info Modal -->
+                        <div class="modal fade" id="employeeInfoModal{{employee.id}}" data-bs-backdrop="static"
+                            data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="staticBackdropLabel">{{employee.firstName}}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <img width="200px" height="200px"
+                                                    src="http://localhost:3030/api/employees/images/{{employee.imageName}}"
+                                                    class="card-img-top  p-2 ">
+                                            </div>
+                                            <div class="col-4">
+                                                <div *ngIf="employee.title === 'Sales Representative'"
+                                                    style="width:100px; height:100px ; border-radius:50%; "
+                                                    class="border border-radius mt-2 position-relative bg-warning"><span
+                                                        class="  position-absolute"
+                                                        style=" top:35px; left:40px; ">SR</span></div>
+
+                                                <div *ngIf="employee.title === 'Vice President, Sales'"
+                                                    style="width:100px; height:100px; border-radius:50%; "
+                                                    class="border border-radius mt-2 position-relative bg-danger"><span
+                                                        class="  position-absolute"
+                                                        style=" top:35px; left:40px;">VPS</span></div>
+
+                                                <div *ngIf="employee.title === 'Sales Manager'"
+                                                    style="width:100px; height:100px; border-radius:50%; "
+                                                    class="border border-radius mt-2 position-relative  bg-info"><span
+                                                        class="  position-absolute"
+                                                        style="top:35px; left:40px; ">SM</span></div>
+
+                                                <div *ngIf="employee.title === 'Inside Sales Coordinator'"
+                                                    style="width:100px; height:100px; border-radius:50%; "
+                                                    class="border border-radius mt-2 position-relative bg-primary"><span
+                                                        class="  position-absolute"
+                                                        style="  top:35px; left:40px; ">ISC</span></div>
+
+                                                <div *ngIf="employee.title === 'Software Developer'   "
+                                                    style="width:100px; height:100px ; border-radius:50%; "
+                                                    class="border border-radius mt-2 position-relative  bg-success">
+                                                    <span class="  position-absolute"
+                                                        style=" top:35px; left:40px;">SD</span>
+                                                </div>
+                                                <p class="card-text"> {{employee.firstName}} {{employee.lastName}} </p>
+                                                <p class="card-text"> {{employee.title}}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="card-body">
+                                            <p class="card-text">{{locale.country}}/{{locale.city}} :
+                                                {{employee.country}}/{{employee.city}} </p>
+                                            <p class="card-text">{{locale.birthDate}} : {{employee.birthDate}}</p>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">{{locale.close}}</button>
+                                        <button class="btn btn-danger mx-3 "
+                                            (click)='employeeDelete(employee.id)'>{{locale.delete}}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </ng-container>
+            </ng-template>
+
+
+
+            <ng-template #third>
+                <div class="col-12  mt-4 p-2" *ngFor="let employee of filterEmployees">
+                    <div class="card  ">
+                        <div class="row g-0">
+                            <div class="col-md-12 col-md-6 col-xl-4  p-2">
+                                <img style="max-width:100px ; min-width: 100px; max-height:100px ; min-height: 100px; "
+                                    src="http://localhost:3030/api/employees/images/{{employee.imageName}}"
+                                    class="img-fluid rounded-start" alt="...">
+
+
+                                <div *ngIf="employee.title === 'Sales Representative'"
+                                    style="width:70px; height:70px ; border-radius:50%; "
+                                    class="border border-radius mt-2 position-relative bg-warning"><span
+                                        class="  position-absolute" style=" top:18px; left:27px; ">SR</span></div>
+
+                                <div *ngIf="employee.title === 'Vice President, Sales'"
+                                    style="width:70px; height:70px ; border-radius:50%; "
+                                    class="border border-radius mt-2 position-relative bg-danger"><span
+                                        class="  position-absolute" style=" top:18px; left:27px;">VPS</span></div>
+
+                                <div *ngIf="employee.title === 'Sales Manager'"
+                                    style="width:70px; height:70px ; border-radius:50%; "
+                                    class="border border-radius mt-2 position-relative  bg-info"><span
+                                        class="  position-absolute" style="top:18px; left:27px; ">SM</span></div>
+
+                                <div *ngIf="employee.title === 'Inside Sales Coordinator'"
+                                    style="width:70px; height:70px ; border-radius:50%; "
+                                    class="border border-radius mt-2 position-relative bg-primary"><span
+                                        class="  position-absolute" style="  top:18px; left:27px; ">ISC</span></div>
+
+                                <div *ngIf="employee.title === 'Software Developer'   "
+                                    style="width:70px; height:70px ; border-radius:50%; "
+                                    class="border border-radius mt-2 position-relative  bg-success"><span
+                                        class="  position-absolute" style=" top:18px; left:27px;">SD</span></div>
+
+                            </div>
+                            <div class="col-md-12 col-md-6 col-xl-4 ">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{locale.firstName}} : {{employee.firstName}} </h5>
+                                    <h5 class="card-title"> {{locale.lastName}} : : {{employee.lastName}} </h5>
+                                    <h5 class="card-title">{{locale.title}} : {{employee.title}} </h5>
+                                    <h5 class="card-title">{{locale.country}} / {{locale.city}} :
+                                        {{employee.country}}/{{employee.city}} </h5>
+                                    <h5 class="card-title">{{locale.birthDate}} : {{employee.birthDate}} </h5>
+
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-md-6 col-xl-4 ">
+                                <div class="card-body ">
+
+
+                                    <div class=" mt-4  ">
+                                        <button class="btn btn-warning " data-bs-toggle="modal"
+                                            [attr.data-bs-target]="'#exampleModal'+ employee.id">{{locale.update}}</button>
+                                        <button class="btn btn-danger mx-1 "
+                                            (click)='employeeDelete(employee.id)'>{{locale.delete}}</button>
+                                        <button class="btn btn-info  " data-bs-toggle="modal"
+                                            [attr.data-bs-target]="'#employeeInfoModal'+ employee.id">{{locale.info}}</button>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--update  Modal -->
+                    <div class="modal fade" id="exampleModal{{employee.id}}" tabindex="-1"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true" style="opacity: 0.9">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-12 mx-auto p-5  register">
+                                            <form #myForm="ngForm" #updateEmployeeForm="ngForm"
+                                                (ngSubmit)="onUpdateEmployeeSubmit(updateEmployeeForm)">
+                                                <div class="text-center" style="height:150px;">
+                                                    <img width="100px" height="100px"
+                                                        src="http://localhost:3030/api/employees/images/{{employee.imageName}}">
+                                                </div>
+
+                                                <input [ngModel]="employee.id" type="hidden" name="id">
+                                                <div class="mb-3">
+                                                    <label class="form-label">{{locale.firstName}}</label>
+                                                    <input [ngModel]="employee.firstName" type="text" name="firstName"
+                                                        class="form-control">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">{{locale.lastName}}</label>
+                                                    <input [ngModel]="employee.lastName" type="text" name="lastName"
+                                                        class="form-control">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">{{locale.title}}</label>
+                                                    <input [ngModel]="employee.title" type="text" name="title"
+                                                        class="form-control">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">{{locale.country}}</label>
+                                                    <input [ngModel]="employee.country" type="text" name="country"
+                                                        class="form-control">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">{{locale.city}}</label>
+                                                    <input [ngModel]="employee.city" type="text" name="city"
+                                                        class="form-control">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">{{locale.birthDate}}</label>
+                                                    <input [ngModel]="employee.birthDate" type="date" name="birthDate"
+                                                        class="form-control">
+                                                </div>
+
+
+                                                <div class="text-center   ">
+                                                    <button type="submit"
+                                                        class="btn btn-warning w-25">{{locale.update}}</button>
+                                                </div>
+
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- info Modal -->
+                    <div class="modal fade" id="employeeInfoModal{{employee.id}}" data-bs-backdrop="static"
+                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="staticBackdropLabel">{{employee.firstName}}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-8">
+                                            <img width="200px" height="200px"
+                                                src="http://localhost:3030/api/employees/images/{{employee.imageName}}"
+                                                class="card-img-top  p-2 ">
+                                        </div>
+                                        <div class="col-4">
+                                            <div *ngIf="employee.title === 'Sales Representative'"
+                                                style="width:100px; height:100px ; border-radius:50%; "
+                                                class="border border-radius mt-2 position-relative bg-warning"><span
+                                                    class="  position-absolute" style=" top:35px; left:40px; ">SR</span>
+                                            </div>
+
+                                            <div *ngIf="employee.title === 'Vice President, Sales'"
+                                                style="width:100px; height:100px; border-radius:50%; "
+                                                class="border border-radius mt-2 position-relative bg-danger"><span
+                                                    class="  position-absolute" style=" top:35px; left:40px;">VPS</span>
+                                            </div>
+
+                                            <div *ngIf="employee.title === 'Sales Manager'"
+                                                style="width:100px; height:100px; border-radius:50%; "
+                                                class="border border-radius mt-2 position-relative  bg-info"><span
+                                                    class="  position-absolute" style="top:35px; left:40px; ">SM</span>
+                                            </div>
+
+                                            <div *ngIf="employee.title === 'Inside Sales Coordinator'"
+                                                style="width:100px; height:100px; border-radius:50%; "
+                                                class="border border-radius mt-2 position-relative bg-primary"><span
+                                                    class="  position-absolute"
+                                                    style="  top:35px; left:40px; ">ISC</span></div>
+
+                                            <div *ngIf="employee.title === 'Software Developer'   "
+                                                style="width:100px; height:100px ; border-radius:50%; "
+                                                class="border border-radius mt-2 position-relative  bg-success"><span
+                                                    class="  position-absolute" style=" top:35px; left:40px;">SD</span>
+                                            </div>
+                                            <p class="card-text"> {{employee.firstName}} {{employee.lastName}} </p>
+                                            <p class="card-text"> {{employee.title}}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <p class="card-text">{{locale.country}}/{{locale.city}} :
+                                            {{employee.country}}/{{employee.city}} </p>
+                                        <p class="card-text">{{locale.birthDate}} : {{employee.birthDate}}</p>
+
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">{{locale.close}}</button>
+                                    <button class="btn btn-danger mx-3 "
+                                        (click)='employeeDelete(employee.id)'>{{locale.delete}}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+            </ng-template>
+        </div>
+
+
+    </div>
+</div>
